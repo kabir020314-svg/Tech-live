@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Tech Live</string>
+    <string name="tagline_brand">Low-Latency Multi-Platform Studio</string>
+    <string name="error_youtube_reconnect">Unable to connect to YouTube. Please reconnect your account.</string>
+    <string name="error_video_processing">Your video could not be processed.</string>
+    <string name="error_daily_quota_reached">Your daily free streaming limit has been reached.</string>
+    <string name="status_reconnecting">Your stream disconnected. Reconnecting…</string>
+    <string name="status_payment_pending">Payment verification is pending.</string>
+    <string name="status_offline">Offline — changes will sync when connection is restored</string>
+    <string name="status_connecting">Connecting…</string>
+    <string name="status_connection_restored">Connection restored</string>
+    <string name="legal_rights_notice">By uploading or streaming content on Tech Live, you confirm that you own or hold valid distribution rights and comply with YouTube, Facebook, TikTok, and Telegram platform policies.</string>
+</resources>

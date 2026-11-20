@@ -1,0 +1,352 @@
+{
+  "entities": {
+    "SystemSettings": {
+      "title": "SystemSettings",
+      "description": "Global platform configuration editable by Admins without rebuilding the Android app.",
+      "type": "object",
+      "properties": {
+        "freeDailyLimitSeconds": { "type": "integer", "description": "Default 10800 (3 hours)" },
+        "monthlyPriceBdt": { "type": "integer", "description": "Monthly plan price in BDT (default 100)" },
+        "lifetimePriceBdt": { "type": "integer", "description": "Lifetime plan price in BDT (default 1500)" },
+        "maxUploadSizeMb": { "type": "integer", "description": "Max prerecorded upload size in MB (default 1024)" },
+        "freeStorageLimitMb": { "type": "integer" },
+        "monthlyStorageLimitMb": { "type": "integer" },
+        "lifetimeStorageLimitMb": { "type": "integer" },
+        "maxCloudDurationHours": { "type": "integer", "description": "Default 168 (7 days)" },
+        "maxConcurrentStreams": { "type": "integer" },
+        "allowedResolutions": { "type": "array" },
+        "allowedFps": { "type": "array" },
+        "maintenanceMode": { "type": "boolean" },
+        "announcementMessage": { "type": "string" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "freeDailyLimitSeconds",
+        "monthlyPriceBdt",
+        "lifetimePriceBdt",
+        "maxUploadSizeMb",
+        "freeStorageLimitMb",
+        "monthlyStorageLimitMb",
+        "lifetimeStorageLimitMb",
+        "maxCloudDurationHours",
+        "maxConcurrentStreams",
+        "allowedResolutions",
+        "allowedFps",
+        "maintenanceMode",
+        "announcementMessage",
+        "updatedAt"
+      ]
+    },
+    "AdminRecord": {
+      "title": "AdminRecord",
+      "description": "Authoritative admin role record.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "role": { "type": "string", "enum": ["ADMIN", "SUPER_ADMIN"] },
+        "email": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "role", "createdAt"]
+    },
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User account, subscription tier, daily 3-hour quota, and storage telemetry.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "displayName": { "type": "string" },
+        "email": { "type": "string" },
+        "photoUrl": { "type": "string" },
+        "role": { "type": "string", "enum": ["USER", "ADMIN", "SUPER_ADMIN"] },
+        "subscriptionPlan": { "type": "string", "enum": ["FREE", "MONTHLY", "LIFETIME"] },
+        "subscriptionStatus": { "type": "string", "enum": ["ACTIVE", "EXPIRED", "CANCELLED"] },
+        "accountStatus": { "type": "string", "enum": ["ACTIVE", "SUSPENDED", "BANNED"] },
+        "dailyUsedSeconds": { "type": "integer" },
+        "dailyUsageDate": { "type": "string" },
+        "storageUsedBytes": { "type": "integer" },
+        "termsAccepted": { "type": "boolean" },
+        "subscriptionStartAt": { "type": "string", "format": "date-time" },
+        "subscriptionExpiryAt": { "type": "string", "format": "date-time" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "userId",
+        "displayName",
+        "email",
+        "role",
+        "subscriptionPlan",
+        "subscriptionStatus",
+        "accountStatus",
+        "dailyUsedSeconds",
+        "dailyUsageDate",
+        "storageUsedBytes",
+        "termsAccepted",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "StreamDestination": {
+      "title": "StreamDestination",
+      "description": "Connected platform or custom RTMP/RTMPS endpoint.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "name": { "type": "string" },
+        "platform": { "type": "string", "enum": ["YOUTUBE", "FACEBOOK", "TIKTOK", "TELEGRAM", "CUSTOM_RTMP", "CUSTOM_RTMPS"] },
+        "protocol": { "type": "string", "enum": ["RTMP", "RTMPS", "OAUTH_API"] },
+        "rtmpUrl": { "type": "string" },
+        "maskedStreamKey": { "type": "string" },
+        "channelName": { "type": "string" },
+        "connectionStatus": { "type": "string", "enum": ["CONNECTED", "DISCONNECTED", "UNAVAILABLE"] },
+        "supports60Fps": { "type": "boolean" },
+        "supports4K": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "name", "platform", "protocol", "rtmpUrl", "maskedStreamKey", "connectionStatus", "supports60Fps", "supports4K", "createdAt", "updatedAt"]
+    },
+    "StreamPreset": {
+      "title": "StreamPreset",
+      "description": "Saved reusable streaming configuration template.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "name": { "type": "string" },
+        "resolution": { "type": "string" },
+        "fps": { "type": "integer" },
+        "videoBitrateKbps": { "type": "integer" },
+        "audioBitrateKbps": { "type": "integer" },
+        "orientation": { "type": "string", "enum": ["LANDSCAPE_16_9", "PORTRAIT_9_16"] },
+        "aspectMode": { "type": "string", "enum": ["FIT", "CROP", "STRETCH", "BLUR_BG"] },
+        "destinationNames": { "type": "array" },
+        "micEnabled": { "type": "boolean" },
+        "cameraEnabled": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "name", "resolution", "fps", "videoBitrateKbps", "audioBitrateKbps", "orientation", "aspectMode", "destinationNames", "micEnabled", "cameraEnabled", "createdAt", "updatedAt"]
+    },
+    "VideoAsset": {
+      "title": "VideoAsset",
+      "description": "Prerecorded video metadata and processing/resumable upload status.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "title": { "type": "string" },
+        "fileName": { "type": "string" },
+        "mimeType": { "type": "string" },
+        "fileSizeBytes": { "type": "integer" },
+        "uploadedBytes": { "type": "integer" },
+        "durationSeconds": { "type": "integer" },
+        "resolution": { "type": "string" },
+        "fps": { "type": "integer" },
+        "videoCodec": { "type": "string" },
+        "audioCodec": { "type": "string" },
+        "processingStage": { "type": "string", "enum": ["UPLOADING", "PAUSED", "PROCESSING", "VALIDATING", "THUMBNAIL", "PREPARING", "READY", "FAILED"] },
+        "uploadProgress": { "type": "integer" },
+        "storageObjectPath": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "title", "fileName", "mimeType", "fileSizeBytes", "uploadedBytes", "durationSeconds", "resolution", "fps", "videoCodec", "audioCodec", "processingStage", "uploadProgress", "storageObjectPath", "createdAt", "updatedAt"]
+    },
+    "StreamSession": {
+      "title": "StreamSession",
+      "description": "Live camera, screen, or cloud prerecorded stream session with health telemetry.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "sourceType": { "type": "string", "enum": ["CAMERA", "SCREEN", "CLOUD_VIDEO"] },
+        "videoId": { "type": "string" },
+        "orientation": { "type": "string", "enum": ["LANDSCAPE_16_9", "PORTRAIT_9_16"] },
+        "aspectMode": { "type": "string", "enum": ["FIT", "CROP", "STRETCH", "BLUR_BG"] },
+        "resolution": { "type": "string" },
+        "fps": { "type": "integer" },
+        "videoBitrateKbps": { "type": "integer" },
+        "audioBitrateKbps": { "type": "integer" },
+        "destinationNames": { "type": "array" },
+        "status": { "type": "string", "enum": ["LIVE", "RECONNECTING", "RUNNING", "COMPLETED", "STOPPED", "FAILED", "SCHEDULED"] },
+        "durationSeconds": { "type": "integer" },
+        "plannedDurationSeconds": { "type": "integer" },
+        "loopMode": { "type": "string", "enum": ["ONCE", "LOOP_2", "LOOP_5", "LOOP_10", "UNLIMITED"] },
+        "droppedFramesPercent": { "type": "number" },
+        "connectionQuality": { "type": "string", "enum": ["EXCELLENT", "GOOD", "FAIR", "POOR", "DISCONNECTED"] },
+        "workerStatus": { "type": "string" },
+        "workerCpuPercent": { "type": "integer" },
+        "workerRamPercent": { "type": "integer" },
+        "reconnectAttempts": { "type": "integer" },
+        "dataTransferredMb": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "title", "sourceType", "orientation", "aspectMode", "resolution", "fps", "videoBitrateKbps", "audioBitrateKbps", "destinationNames", "status", "durationSeconds", "plannedDurationSeconds", "loopMode", "droppedFramesPercent", "connectionQuality", "workerStatus", "workerCpuPercent", "workerRamPercent", "reconnectAttempts", "dataTransferredMb", "createdAt", "updatedAt"]
+    },
+    "ScheduledStream": {
+      "title": "ScheduledStream",
+      "description": "Cloud-scheduled prerecorded stream job up to 7 continuous days.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "title": { "type": "string" },
+        "videoId": { "type": "string" },
+        "videoTitle": { "type": "string" },
+        "scheduledStartIso": { "type": "string" },
+        "scheduledEpochMs": { "type": "integer" },
+        "durationHours": { "type": "integer" },
+        "loopMode": { "type": "string", "enum": ["ONCE", "LOOP_2", "LOOP_5", "LOOP_10", "UNLIMITED"] },
+        "recurrence": { "type": "string", "enum": ["ONCE", "DAILY", "WEEKLY"] },
+        "destinationNames": { "type": "array" },
+        "resolution": { "type": "string" },
+        "fps": { "type": "integer" },
+        "orientation": { "type": "string" },
+        "aspectMode": { "type": "string" },
+        "status": { "type": "string", "enum": ["SCHEDULED", "RUNNING", "COMPLETED", "CANCELLED", "FAILED"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "title", "videoId", "videoTitle", "scheduledStartIso", "scheduledEpochMs", "durationHours", "loopMode", "recurrence", "destinationNames", "resolution", "fps", "orientation", "aspectMode", "status", "createdAt", "updatedAt"]
+    },
+    "NotificationItem": {
+      "title": "NotificationItem",
+      "description": "User stream, quota, storage, and billing notification.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "type": { "type": "string" },
+        "title": { "type": "string" },
+        "message": { "type": "string" },
+        "read": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "type", "title", "message", "read", "createdAt", "updatedAt"]
+    },
+    "PaymentRecord": {
+      "title": "PaymentRecord",
+      "description": "Subscription payment submission requiring backend/admin verification.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "userEmail": { "type": "string" },
+        "transactionId": { "type": "string" },
+        "amount": { "type": "number" },
+        "currency": { "type": "string" },
+        "paymentMethod": { "type": "string", "enum": ["BKASH", "NAGAD", "CARD", "GATEWAY"] },
+        "plan": { "type": "string", "enum": ["MONTHLY", "LIFETIME"] },
+        "status": { "type": "string", "enum": ["PENDING", "PAID", "FAILED", "REJECTED", "REFUNDED"] },
+        "notes": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" },
+        "verifiedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "userEmail", "transactionId", "amount", "currency", "paymentMethod", "plan", "status", "createdAt", "updatedAt"]
+    },
+    "WithdrawalRecord": {
+      "title": "WithdrawalRecord",
+      "description": "Admin revenue withdrawal request calculated strictly from verified payments.",
+      "type": "object",
+      "properties": {
+        "adminId": { "type": "string" },
+        "amount": { "type": "number" },
+        "currency": { "type": "string" },
+        "method": { "type": "string", "enum": ["BKASH", "NAGAD", "BANK_TRANSFER"] },
+        "destination": { "type": "string" },
+        "status": { "type": "string", "enum": ["PENDING", "PROCESSING", "COMPLETED", "REJECTED"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["adminId", "amount", "currency", "method", "destination", "status", "createdAt", "updatedAt"]
+    },
+    "AbuseReport": {
+      "title": "AbuseReport",
+      "description": "User content or system abuse report.",
+      "type": "object",
+      "properties": {
+        "reporterId": { "type": "string" },
+        "targetStreamId": { "type": "string" },
+        "reason": { "type": "string" },
+        "details": { "type": "string" },
+        "status": { "type": "string", "enum": ["OPEN", "REVIEWED", "RESOLVED", "DISMISSED"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["reporterId", "reason", "details", "status", "createdAt", "updatedAt"]
+    },
+    "AuditLog": {
+      "title": "AuditLog",
+      "description": "Immutable security and admin action audit trail.",
+      "type": "object",
+      "properties": {
+        "actorId": { "type": "string" },
+        "actorEmail": { "type": "string" },
+        "action": { "type": "string" },
+        "target": { "type": "string" },
+        "severity": { "type": "string", "enum": ["INFO", "WARNING", "SECURITY"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["actorId", "action", "target", "severity", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/system_settings/{settingId}": {
+      "schema": { "$ref": "#/entities/SystemSettings" },
+      "description": "Platform-wide admin-configurable limits and pricing."
+    },
+    "/admins/{userId}": {
+      "schema": { "$ref": "#/entities/AdminRecord" },
+      "description": "Trusted admin role directory."
+    },
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "User profiles, quotas, and subscription state."
+    },
+    "/users/{userId}/destinations/{destId}": {
+      "schema": { "$ref": "#/entities/StreamDestination" },
+      "description": "User RTMP/RTMPS and OAuth broadcast destinations."
+    },
+    "/users/{userId}/presets/{presetId}": {
+      "schema": { "$ref": "#/entities/StreamPreset" },
+      "description": "User saved stream presets and templates."
+    },
+    "/users/{userId}/videos/{videoId}": {
+      "schema": { "$ref": "#/entities/VideoAsset" },
+      "description": "User prerecorded videos and upload/processing status."
+    },
+    "/users/{userId}/streams/{streamId}": {
+      "schema": { "$ref": "#/entities/StreamSession" },
+      "description": "User live and cloud stream history and health telemetry."
+    },
+    "/users/{userId}/schedules/{scheduleId}": {
+      "schema": { "$ref": "#/entities/ScheduledStream" },
+      "description": "User scheduled cloud streams."
+    },
+    "/users/{userId}/notifications/{notificationId}": {
+      "schema": { "$ref": "#/entities/NotificationItem" },
+      "description": "User notifications."
+    },
+    "/active_streams/{streamId}": {
+      "schema": { "$ref": "#/entities/StreamSession" },
+      "description": "Active stream monitoring mirror for owner and admin console."
+    },
+    "/payments/{paymentId}": {
+      "schema": { "$ref": "#/entities/PaymentRecord" },
+      "description": "Subscription payment records requiring backend/admin verification."
+    },
+    "/withdrawals/{withdrawalId}": {
+      "schema": { "$ref": "#/entities/WithdrawalRecord" },
+      "description": "Admin revenue withdrawal records."
+    },
+    "/reports/{reportId}": {
+      "schema": { "$ref": "#/entities/AbuseReport" },
+      "description": "User-submitted abuse and policy reports."
+    },
+    "/audit_logs/{logId}": {
+      "schema": { "$ref": "#/entities/AuditLog" },
+      "description": "Immutable audit and security event logs."
+    }
+  }
+}

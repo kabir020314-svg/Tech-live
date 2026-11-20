@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tech Live — Admin Control Console</title>
+  <style>
+    :root {
+      --bg: #070B14; --surface: #101726; --border: #26334D;
+      --text: #F1F5F9; --muted: #94A3B8; --cyan: #00E5FF;
+      --crimson: #FF2E54; --emerald: #10B981; --amber: #F59E0B;
+    }
+    body { margin: 0; font-family: system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); }
+    header { padding: 18px 28px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: var(--surface); }
+    main { max-width: 1200px; margin: 24px auto; padding: 0 20px; display: grid; gap: 20px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 16px; }
+    .label { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; }
+    .value { font-size: 24px; font-weight: 700; margin-top: 6px; color: var(--cyan); font-family: ui-monospace, monospace; }
+    .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    input, button { padding: 10px 14px; border-radius: 10px; border: 1px solid var(--border); background: #0B1220; color: var(--text); }
+    button { background: var(--cyan); color: #070B14; font-weight: 700; cursor: pointer; border: none; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { text-align: left; padding: 10px; border-bottom: 1px solid var(--border); }
+    .badge { padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; }
+    .paid { background: rgba(16,185,129,0.2); color: var(--emerald); }
+    .pending { background: rgba(245,158,11,0.2); color: var(--amber); }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <strong>TECH LIVE</strong> &nbsp;·&nbsp; <span style="color:var(--muted)">Admin Control Console</span>
+    </div>
+    <div class="row">
+      <input id="apiBase" placeholder="Backend API Base URL (e.g. https://api.techlive.example/api/v1)" style="min-width:300px" />
+      <input id="adminToken" type="password" placeholder="Admin JWT Token" />
+      <button onclick="refreshHealth()">Connect & Refresh</button>
+    </div>
+  </header>
+  <main>
+    <div class="grid">
+      <div class="card"><div class="label">Server Health</div><div class="value" id="healthStatus">—</div></div>
+      <div class="card"><div class="label">CPU / RAM Usage</div><div class="value" id="cpuRam">—</div></div>
+      <div class="card"><div class="label">Active Workers</div><div class="value" id="activeWorkers">—</div></div>
+      <div class="card"><div class="label">Failed Workers</div><div class="value" id="failedWorkers">—</div></div>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">Backend Integration Status</h3>
+      <p style="color:var(--muted); margin-bottom:0">
+        This standalone Web Admin Console connects directly to your Tech Live Node.js API (`/api/v1/admin/*`).
+        All verified revenue balances, payment approvals, refunds, worker telemetry, and system settings are synchronized across both Web Admin and the role-gated Android Admin Dashboard.
+      </p>
+    </div>
+  </main>
+  <script>
+    async function refreshHealth() {
+      const base = document.getElementById('apiBase').value.replace(/\/$/, '');
+      const token = document.getElementById('adminToken').value;
+      if (!base || !token) return alert('Enter API Base URL and Admin JWT Token.');
+      try {
+        const res = await fetch(`${base}/admin/servers/health`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        document.getElementById('healthStatus').textContent = data.health;
+        document.getElementById('cpuRam').textContent = `${data.cpuPercent}% / ${data.ramPercent}%`;
+        document.getElementById('activeWorkers').textContent = data.activeWorkers;
+        document.getElementById('failedWorkers').textContent = data.failedWorkers;
+      } catch (err) {
+        alert(`Failed to query admin API: ${err.message}`);
+      }
+    }
+  </script>
+</body>
+</html>

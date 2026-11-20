@@ -1,0 +1,6 @@
+{
+  "name": "Tech Live",
+  "description": "Multi-platform live streaming SaaS app with low-latency camera and screen streaming, cloud prerecorded 7-day streaming, scheduling, subscriptions, and admin console.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
